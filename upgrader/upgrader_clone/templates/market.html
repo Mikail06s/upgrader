@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Маркет{% endblock %}
+{% block content %}
+<h1>Маркет скинов</h1>
+<p class="subtitle">Покупайте и продавайте скины между игроками</p>
+
+<div class="market-list">
+    {% for item in listings %}
+    <div class="market-item">
+        <img src="{{ item.image_url }}" alt="{{ item.skin_name }}">
+        <div class="market-item-info">
+            <div>{{ item.skin_name }}</div>
+            <div>{{ item.seller_name }}</div>
+            <div class="price">{{ "%.2f"|format(item.price) }} ₽</div>
+        </div>
+        {% if session.user_id and balance >= item.price %}
+            <a href="{{ url_for('market_buy', listing_id=item.id) }}" class="btn-buy">Купить</a>
+        {% else %}
+            <button class="btn-buy" disabled>Недостаточно средств</button>
+        {% endif %}
+    </div>
+    {% else %}
+    <p>Объявлений пока нет</p>
+    {% endfor %}
+</div>
+{% endblock %}

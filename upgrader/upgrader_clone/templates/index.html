@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Скины{% endblock %}
+{% block content %}
+<h1>Каталог скинов</h1>
+<p class="subtitle">Выберите скину для покупки или осмотрите коллекцию</p>
+<div class="skin-grid">
+    {% for skin in skins %}
+    <div class="skin-card">
+        <img src="{{ skin.image_url }}" alt="{{ skin.name }}" class="skin-img">
+        <div class="skin-info">
+            <div class="skin-name">{{ skin.name }}</div>
+            <div class="skin-tier">{{ skin.tier }} · {{ skin.wear }}</div>
+            <div class="skin-price">{{ "%.2f"|format(skin.price) }} ₽</div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

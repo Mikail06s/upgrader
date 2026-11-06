@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Апгрейд{% endblock %}
+{% block content %}
+<h1>Апгрейд скина</h1>
+<p class="subtitle">Поменяйте свою скину на более дорогую с шансом на выигрыш</p>
+
+{% if result %}
+<div class="result-box {% if win %}win{% else %}lose{% endif %}">
+    {{ result }}
+    {% if win and target_skin %}
+        <img src="{{ target_skin.image_url }}" alt="Выигрыш" class="win-img">
+    {% endif %}
+</div>
+{% endif %}
+
+<div class="upgrade-wrapper">
+    <div class="upgrade-col">
+        <h3>Ваша скина (вход)</h3>
+        <form method="POST">
+            <select name="input_inv_id" class="form-select" required>
+                {% for skin in inventory %}
+                <option value="{{ skin.inv_id }}">{{ skin.name }} ({{ skin.wear }})</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+    <div class="upgrade-col">
+        <h3>Целевая скина (выход)</h3>
+        <form method="POST">
+            <select name="output_skin_id" class="form-select" required>
+                {% for skin in skins %}
+                <option value="{{ skin.id }}">{{ skin.name }} — {{ "%.2f"|format(skin.price) }} ₽</option>
+                {% endfor %}
+            </select><br>
+            <label>Ставка (₽): <input type="number" name="cost" value="1000" min="1" required></label><br>
+            <div class="chance">Шанс на выигрыш: <span id="chance-val">{{ "%.2f"|format(chance) }}</span>%</div>
+            <button type="submit" class="btn-upgrade">АПГРЕЙД</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Upgrader Clone{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">UPGRADER.CLONE</div>
+        <div class="balance">
+            Баланс: <span id="balance-val">{% if balance is defined %}{{ balance }}{% else %}0{% endif %}</span> ₽
+        </div>
+        <div class="nav-links">
+            {% if session.user_id %}
+                <a href="{{ url_for('profile') }}">Профиль</a>
+                <a href="{{ url_for('upgrade') }}">Апгрейд</a>
+                <a href="{{ url_for('market') }}">Маркет</a>
+                <a href="{{ url_for('logout') }}">Выход</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Вход</a>
+                <a href="{{ url_for('register') }}">Регистрация</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash">
+                {% for msg in messages %}<div class="alert">{{ msg }}</div>{% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        async function updateBalance() {
+            const res = await fetch('/api/balance');
+            const data = await res.json();
+            document.getElementById('balance-val').innerText = data.balance;
+        }
+        setInterval(updateBalance, 5000);
+    </script>
+</body>
+</html>

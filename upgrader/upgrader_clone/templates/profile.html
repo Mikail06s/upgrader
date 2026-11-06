@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Профиль{% endblock %}
+{% block content %}
+<h1>Профиль: {{ user.username }}</h1>
+<div class="profile-grid">
+    <div class="profile-card">
+        <h3>Баланс</h3>
+        <div class="big-balance">{{ "%.2f"|format(balance) }} ₽</div>
+    </div>
+    <div class="profile-card">
+        <h3>Инвентарь ({{ inventory|length }})</h3>
+        <div class="inv-grid">
+            {% for skin in inventory %}
+            <div class="inv-skin">
+                <img src="{{ skin.image_url }}" alt="{{ skin.name }}">
+                <div>{{ skin.name }}</div>
+                <form method="POST" action="{{ url_for('market_sell') }}" style="display:inline;" onsubmit="return confirm('Выставить на продажу?')">
+                    <input type="hidden" name="inv_id" value="{{ skin.inv_id }}">
+                    <input type="number" name="price" placeholder="Цена ₽" required min="1">
+                    <button type="submit">Продать</button>
+                </form>
+            </div>
+            {% else %}
+            <p>Инвентарь пуст</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
